@@ -9,7 +9,7 @@ import random
 api_key = None
 
 try:
-    f = open('API_KEY', 'r')
+    f = open('.API_KEY', 'r')
     api_key = f.read().replace('\n', '')
 except:
     pass
@@ -118,7 +118,8 @@ def generate_message(model_dict):
             req = urllib.request.Request(request_url, params.encode('ascii'))
             try:
                 request = urllib.request.urlopen(req)
-            except urllib.error.HTTPError:
+            except urllib.error.HTTPError as e:
+                print(e)
                 continue
 
 
@@ -129,6 +130,7 @@ def generate_data(group_id):
         messages_url = '/' + group_id + '/messages'
         limit_url = '&limit=100'
         request_url = base_url + group_url + messages_url + token_url + limit_url
+        print(request_url)
         if before_id_url:
             request_url += before_id_url
         try:
@@ -165,6 +167,7 @@ def generate_markov_model(messages):
         text = '\n'.join(tokenized_text)
         text_data += text + '\n'
         model = markovify.NewlineText(text_data)
+    print(text_data)
     return model
 
 
